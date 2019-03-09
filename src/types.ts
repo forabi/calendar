@@ -1,8 +1,9 @@
 export type Coords = { x: number; y: number };
 
-export type Event = DateRange[];
+export type Event = Array<DateRange>;
 
 export type CellInfo = {
+  id: string;
   spanX: number;
   spanY: number;
   startX: number;
@@ -11,7 +12,7 @@ export type CellInfo = {
   endY: number;
 };
 
-export type DateRange = [Date, Date];
+export type DateRange = { id: string; value: [Date, Date] };
 
 export type MapCellInfoToDateRange = (
   options: MapCellInfoToDateRangeOptions
@@ -35,6 +36,7 @@ export type Grid = {
 };
 
 export type Rect = ClientRect & {
+  id: string;
   startX: number;
   endX: number;
   startY: number;

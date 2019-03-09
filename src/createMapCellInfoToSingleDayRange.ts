@@ -2,11 +2,14 @@ import { MapCellInfoToDateRange, DateRange, CellInfo } from './types';
 import { createMapCellInfoToContiguousDateRange } from './createMapCellInfoToContiguousDateRange';
 import { startOfDay, setDay, getDay, addDays, isEqual } from 'date-fns';
 
-const constrainToOneDay = ([start, end]: DateRange): DateRange => {
+const constrainToOneDay = ({
+  value: [start, end],
+  ...rest
+}: DateRange): DateRange => {
   if (isEqual(startOfDay(end), end)) {
-    return [start, startOfDay(addDays(start, 1))];
+    return { ...rest, value: [start, startOfDay(addDays(start, 1))] };
   }
-  return [start, setDay(end, getDay(start))];
+  return { ...rest, value: [start, setDay(end, getDay(start))] };
 };
 
 export const createMapCellInfoToSingleDateRange: MapCellInfoToDateRange = options => {

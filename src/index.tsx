@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 import ReactDOM from 'react-dom';
 import invariant from 'invariant';
-import { times } from 'lodash';
+import { times, findIndex } from 'lodash';
 import { format, startOfWeek, addDays, compareAsc } from 'date-fns';
 import useComponentSize from '@rehooks/component-size';
 import useUndo from 'use-undo';
@@ -31,10 +31,11 @@ import { createGridForContainer } from './utils/createGridFromContainer';
 import { getTextForDateRange } from './utils/getTextForDateRange';
 import { Grid, Event as CalendarEvent, CellInfo, DateRange } from './types';
 import { createMapCellInfoToContiguousDateRange } from './createMapCellInfoToContiguousDateRange';
-import { mergeEvents, mergeRanges } from './utils/mergeEvents';
+import { mergeEvents } from './utils/mergeEvents';
 
 import './styles.scss';
 import { useEventListener } from './utils/useEventListener';
+import uuid from 'uuid/v4';
 
 const originDate = startOfWeek(new Date(), { weekStartsOn: 1 });
 
@@ -84,20 +85,16 @@ const dateRangeToCells = createMapDateRangeToCells({
   toY
 });
 
-type OnMoveCallback = (
-  newDateRange: DateRange | undefined,
-  rangeIndex: number
-) => void;
+type OnChangeCallback = (newCellInfo: CellInfo | undefined, id: string) => void;
 
 function RangeBox({
   grid,
   isBeingEdited,
-  rangeIndex,
   cellIndex,
   cellArray,
   cell,
   className,
-  onMove,
+  onChange,
   cellInfoToDateRange,
   isResizable,
   isDeletable,
@@ -108,11 +105,10 @@ function RangeBox({
   cellIndex: number;
   cellArray: CellInfo[];
   className?: string;
-  onMove?: OnMoveCallback;
+  onChange?: OnChangeCallback;
   isResizable?: boolean;
   isDeletable?: boolean;
   isMovable?: boolean;
-  rangeIndex: number;
   isBeingEdited?(cell: CellInfo): boolean;
   cellInfoToDateRange(cell: CellInfo): DateRange;
 }) {
@@ -138,8 +134,8 @@ function RangeBox({
       return;
     }
 
-    onMove && onMove(undefined, rangeIndex);
-  }, [ref.current, onMove, isDeletable, rangeIndex]);
+    onChange && onChange(undefined, modifiedCell.id);
+  }, [ref.current, onChange, isDeletable]);
 
   useMousetrap('del', handleDelete, ref.current);
 
@@ -151,8 +147,8 @@ function RangeBox({
   const isEnd = cellIndex === cellArray.length - 1;
 
   const handleStop = useCallback(() => {
-    onMove && onMove(cellInfoToDateRange(modifiedCell), rangeIndex);
-  }, [modifiedCell, rangeIndex, onMove]);
+    onChange && onChange(modifiedCell, modifiedCell.id);
+  }, [modifiedCell, onChange]);
 
   useMousetrap(
     'up',
@@ -171,7 +167,7 @@ function RangeBox({
         endY: modifiedCell.endY - 1
       };
 
-      onMove && onMove(cellInfoToDateRange(newCell), rangeIndex);
+      onChange && onChange(newCell, newCell.id);
     },
     ref.current
   );
@@ -193,7 +189,7 @@ function RangeBox({
         endY: modifiedCell.endY + 1
       };
 
-      onMove && onMove(cellInfoToDateRange(newCell), rangeIndex);
+      onChange && onChange(newCell, newCell.id);
     },
     ref.current
   );
@@ -332,10 +328,10 @@ function RangeBox({
         >
           <div className="event-content" style={style}>
             <span className="start">
-              {isStart && format(modifiedDateRange[0], 'h:mma')}
+              {isStart && format(modifiedDateRange.value[0], 'h:mma')}
             </span>
             <span className="end">
-              {isEnd && format(modifiedDateRange[1], 'h:mma')}
+              {isEnd && format(modifiedDateRange.value[1], 'h:mma')}
             </span>
           </div>
         </Resizable>
@@ -348,40 +344,39 @@ function Schedule({
   ranges,
   grid,
   className,
-  onMove,
+  onChange,
   isResizable,
   isDeletable,
   isMovable,
   cellInfoToDateRange,
   isBeingEdited
 }: {
-  ranges: CalendarEvent;
+  ranges: DateRange[];
   grid: Grid;
   className?: string;
   isResizable?: boolean;
   isDeletable?: boolean;
   isMovable?: boolean;
-  onMove?: OnMoveCallback;
+  onChange?: OnChangeCallback;
   isBeingEdited?(cell: CellInfo): boolean;
   cellInfoToDateRange(cell: CellInfo): DateRange;
 }) {
   return (
     <div className="range-boxes">
-      {ranges.map((dateRange, rangeIndex) => {
+      {ranges.map(dateRange => {
         return dateRangeToCells(dateRange).map((cell, cellIndex, array) => {
           return (
             <RangeBox
-              key={cellIndex}
+              key={cell.id}
               isResizable={isResizable}
               isMovable={isMovable}
               isDeletable={isDeletable}
               cellInfoToDateRange={cellInfoToDateRange}
               cellArray={array}
               cellIndex={cellIndex}
-              rangeIndex={rangeIndex}
               className={className}
               isBeingEdited={isBeingEdited}
-              onMove={onMove}
+              onChange={onChange}
               grid={grid}
               cell={cell}
             />
@@ -392,7 +387,7 @@ function Schedule({
   );
 }
 
-const defaultSchedule: [string, string][] = [
+const defaultSchedule: CalendarEvent = ([
   // ['2019-03-03T22:45:00.000Z', '2019-03-04T01:15:00.000Z'],
   ['2019-03-05T22:00:00.000Z', '2019-03-06T01:00:00.000Z'],
   ['2019-03-04T22:15:00.000Z', '2019-03-05T01:00:00.000Z'],
@@ -400,7 +395,13 @@ const defaultSchedule: [string, string][] = [
   // ['2019-03-08T22:00:00.000Z', '2019-03-09T01:00:00.000Z'],
   ['2019-03-09T22:00:00.000Z', '2019-03-10T01:00:00.000Z'],
   ['2019-03-06T22:00:00.000Z', '2019-03-07T01:00:00.000Z']
-];
+] as [string, string][])
+  .map(value => value.map(dateString => new Date(dateString)) as [Date, Date])
+  .map(value => ({
+    id: uuid(),
+    value
+  }))
+  .sort((range1, range2) => compareAsc(range1.value[0], range2.value[0]));
 
 function App() {
   const root = useRef<HTMLDivElement | null>(null);
@@ -434,13 +435,7 @@ function App() {
       canUndo: canUndoSchedule,
       canRedo: canRedoSchedule
     }
-  ] = useUndo<CalendarEvent>(
-    defaultSchedule
-      .map(
-        range => range.map(dateString => new Date(dateString)) as [Date, Date]
-      )
-      .sort((range1, range2) => compareAsc(range1[0], range2[0]))
-  );
+  ] = useUndo<CalendarEvent>(defaultSchedule);
 
   const { totalHeight, totalWidth } = useMemo(() => {
     let totalHeight: number | null = null;
@@ -526,22 +521,30 @@ function App() {
     document
   );
 
-  const handleEventMove = useCallback<OnMoveCallback>(
-    (newDateRange, rangeIndex) => {
-      if (!scheduleState.present && newDateRange) {
-        return [newDateRange];
+  const handleEventChange = useCallback<OnChangeCallback>(
+    (newCellInfo, cellId) => {
+      if (!scheduleState.present && newCellInfo) {
+        return [newCellInfo];
       }
 
-      const newSchedule = [...scheduleState.present];
+      let newSchedule = [...scheduleState.present];
+      const rangeIndex = findIndex(newSchedule, range => range.id === cellId);
+      invariant(
+        rangeIndex >= 0,
+        'Expected cell to change to have a matching ID in schedule'
+      );
 
-      if (!newDateRange) {
-        console.log(rangeIndex, 'will be deleted from', newSchedule);
+      if (!newCellInfo) {
         newSchedule.splice(rangeIndex, 1);
+        invariant(
+          newSchedule.length < scheduleState.present.length,
+          'Expected cell to delete to have a matching ID in schedule'
+        );
       } else {
-        newSchedule[rangeIndex] = newDateRange;
+        newSchedule[rangeIndex] = cellInfoToSingleDateRange(newCellInfo);
       }
 
-      setSchedule(mergeRanges(newSchedule));
+      setSchedule(mergeEvents(newSchedule));
     },
     [scheduleState.present]
   );
@@ -591,7 +594,12 @@ function App() {
               {times(48).map(timeIndex => {
                 let startText = '';
                 if (timeIndex % 2 === 0) {
-                  const [[start]] = getDateRangeForVisualGrid({
+                  const [
+                    {
+                      value: [start]
+                    }
+                  ] = getDateRangeForVisualGrid({
+                    id: '',
                     startX: 0,
                     startY: timeIndex,
                     endX: 0,
@@ -643,7 +651,7 @@ function App() {
               isResizable
               isMovable
               isDeletable
-              onMove={handleEventMove}
+              onChange={handleEventChange}
               ranges={scheduleState.present}
               grid={grid}
             />

@@ -1,12 +1,13 @@
 import { isSameDay, format } from 'date-fns';
+import { DateRange } from '../types';
 
 export const getTextForDateRange = (
-  dates: Date[],
+  { value }: DateRange,
   template?: string,
   template2?: string
 ) => {
-  const start = dates[0];
-  const end = dates[dates.length - 1];
+  const start = value[0];
+  const end = value[value.length - 1];
 
   if (isSameDay(start, end) && !template) {
     return `${format(start, 'ddd h:mma')} - ${format(end, 'h:mma')}`;

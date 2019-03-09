@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { isEqual } from 'lodash';
 import { fromEvent, merge } from 'rxjs';
 import {
@@ -12,12 +12,15 @@ import {
 } from 'rxjs/operators';
 import { createPageMapCoordsToContainer } from './utils/createPageMapCoordsToContainer';
 import { Rect } from './types';
+import uuid from 'uuid/v4';
 
 export function useClickAndDrag(ref: React.RefObject<HTMLElement>) {
   const [style, setStyle] = useState({ top: 0, left: 0, width: 0, height: 0 });
   const [box, setBox] = useState<Rect | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [hasFinishedDragging, setHasFinishedDragging] = useState(false);
+
+  const id = useMemo(() => uuid(), [isDragging]);
 
   useEffect(() => {
     const container = ref.current;
@@ -76,6 +79,7 @@ export function useClickAndDrag(ref: React.RefObject<HTMLElement>) {
               const right = Math.max(startX, endX);
 
               return {
+                id,
                 startX,
                 startY,
                 endX,

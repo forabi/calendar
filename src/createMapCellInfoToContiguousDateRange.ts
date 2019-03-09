@@ -1,6 +1,7 @@
-import { MapCellInfoToDateRange } from './types';
+import { MapCellInfoToDateRange, DateRange } from './types';
 import { isBefore } from 'date-fns';
 import { cellToDate } from './cellToDate';
+import uuid from 'uuid/v4';
 
 export const createMapCellInfoToContiguousDateRange: MapCellInfoToDateRange = ({
   fromY: toMin,
@@ -16,7 +17,7 @@ export const createMapCellInfoToContiguousDateRange: MapCellInfoToDateRange = ({
     originDate
   });
 
-  return [
+  return ([
     isBefore(startDate, endDate) ? [startDate, endDate] : [endDate, startDate]
-  ];
+  ] as [Date, Date][]).map(value => ({ id: uuid(), value }));
 };
