@@ -1,6 +1,7 @@
 import { compareAsc, startOfWeek } from 'date-fns';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import uuid from 'uuid/v4';
 import 'resize-observer-polyfill/dist/ResizeObserver.global';
 import { Event as CalendarEvent } from './types';
 
@@ -19,7 +20,8 @@ const rangeStrings: [string, string][] = [
 
 const defaultSchedule: CalendarEvent = rangeStrings
   .map(range => range.map(dateString => new Date(dateString)) as [Date, Date])
-  .sort((range1, range2) => compareAsc(range1[0], range2[0]));
+  .sort((range1, range2) => compareAsc(range1[0], range2[0]))
+  .map(value => ({ id: uuid(), value }));
 
 const rootElement = document.getElementById('root');
 

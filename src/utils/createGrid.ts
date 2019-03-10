@@ -34,7 +34,7 @@ export const createGrid = ({
       const width = spanX * this.cellWidth;
 
       return {
-        id,
+        id: id.self,
         bottom,
         top,
         left,
@@ -75,7 +75,7 @@ export const createGrid = ({
       const spanY = clamp(getSpan(startY, endY), 1, numVerticalCells);
 
       return {
-        id,
+        id: { self: id, range: '' },
         spanX,
         spanY,
         startX,

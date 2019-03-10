@@ -8,7 +8,7 @@ export type Coords = { x: number; y: number };
 export type Event = DateRange[];
 
 export type CellInfo = {
-  id: string;
+  id: { self: string; range: string };
   spanX: number;
   spanY: number;
   startX: number;
@@ -17,7 +17,10 @@ export type CellInfo = {
   endY: number;
 };
 
-export type DateRange = [Date, Date];
+export type DateRange = {
+  id: string;
+  value: [Date, Date];
+};
 
 export type MapCellInfoToDateRange = (
   options: MapCellInfoToDateRangeOptions

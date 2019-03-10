@@ -39,7 +39,7 @@ export const Schedule = React.memo(function Schedule({
             {dateRangeToCells(dateRange).map((cell, cellIndex, array) => {
               return (
                 <RangeBox
-                  key={cell.id}
+                  key={cell.id.self}
                   classes={classes}
                   isResizable={isResizable}
                   isMovable={isMovable}

@@ -30,7 +30,7 @@ import {
   RecurringTimeRange
 } from '../utils/createMapCellInfoToRecurringTimeRange';
 import { createMapDateRangeToCells } from '../utils/createMapDateRangeToCells';
-import { mergeEvents, mergeRanges } from '../utils/mergeEvents';
+import { mergeEvents } from '../utils/mergeEvents';
 import { Cell } from './Cell';
 import { Schedule } from './Schedule';
 
@@ -225,7 +225,7 @@ export const TimeGridScheduler = React.memo(function TimeGridScheduler({
         newSchedule[rangeIndex] = newDateRange;
       }
 
-      setSchedule(mergeRanges(newSchedule));
+      setSchedule(mergeEvents(newSchedule));
     },
     [scheduleState.present]
   );

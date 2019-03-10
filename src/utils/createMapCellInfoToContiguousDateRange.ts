@@ -6,7 +6,7 @@ export const createMapCellInfoToContiguousDateRange: MapCellInfoToDateRange = ({
   fromY: toMin,
   fromX: toDay,
   originDate
-}) => ({ startX, startY, endX, endY }) => {
+}) => ({ id, startX, startY, endX, endY }) => {
   const startDate = cellToDate({ startX, startY, toMin, toDay, originDate });
   const endDate = cellToDate({
     startX: endX,
@@ -16,7 +16,9 @@ export const createMapCellInfoToContiguousDateRange: MapCellInfoToDateRange = ({
     originDate
   });
 
-  return [
-    isBefore(startDate, endDate) ? [startDate, endDate] : [endDate, startDate]
-  ];
+  const value: [Date, Date] = isBefore(startDate, endDate)
+    ? [startDate, endDate]
+    : [endDate, startDate];
+
+  return [{ id: id.range, value }];
 };

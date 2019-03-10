@@ -7,7 +7,6 @@ import {
 } from 'date-fns';
 import { range } from 'lodash';
 import { getSpan } from './getSpan';
-import uuid from 'uuid/v4';
 
 export const createMapDateRangeToCells = ({
   toX = (x: number) => x,
@@ -20,7 +19,7 @@ export const createMapDateRangeToCells = ({
   numHorizontalCells: number;
   numVerticalCells: number;
   originDate: Date;
-}) => ([start, end]: DateRange): CellInfo[] => {
+}) => ({ id, value: [start, end] }: DateRange): CellInfo[] => {
   const originOfThisDay = startOfDay(start);
   const _startX = toX(differenceInDays(start, originDate));
   const _startY = toY(differenceInMinutes(start, originOfThisDay));
@@ -38,7 +37,10 @@ export const createMapDateRangeToCells = ({
     const spanY = getSpan(startY, endY);
 
     return {
-      id: uuid(),
+      id: {
+        self: '',
+        range: id
+      },
       startX,
       startY,
       endX,

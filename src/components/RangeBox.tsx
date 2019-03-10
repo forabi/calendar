@@ -13,7 +13,7 @@ import Draggable, { DraggableEventHandler } from 'react-draggable';
 import useMousetrap from '../hooks/useMousetrap';
 import { CellInfo } from '../types';
 import { ScheduleProps } from './Schedule';
-import { getTextForDateRange } from '../utils/getTextForDateRange';
+import { getTextForDateSpan } from '../utils/getTextForDateSpan';
 // @ts-ignore
 import VisuallyHidden from '@reach/visually-hidden';
 import { isEqual } from 'lodash';
@@ -265,13 +265,13 @@ export const RangeBox = React.memo(function RangeBox({
         >
           <div className={classes['event-content']}>
             <VisuallyHidden>
-              {getTextForDateRange(modifiedDateRange)}
+              {getTextForDateSpan(modifiedDateRange.value)}
             </VisuallyHidden>
             <span aria-hidden className={classes['start']}>
-              {isStart && format(modifiedDateRange[0], 'h:mma')}
+              {isStart && format(modifiedDateRange.value[0], 'h:mma')}
             </span>
             <span aria-hidden className={classes['end']}>
-              {isEnd && format(modifiedDateRange[1], 'h:mma')}
+              {isEnd && format(modifiedDateRange.value[1], 'h:mma')}
             </span>
           </div>
         </Resizable>

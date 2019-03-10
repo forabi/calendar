@@ -25,7 +25,7 @@ const formatHour = (date: Date) => {
   return format(date, 'h:m');
 };
 
-export const getTextForDateRange = (
+export const getTextForDateSpan = (
   dates: [Date, Date],
   template?: string,
   template2?: string

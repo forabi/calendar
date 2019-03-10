@@ -16,7 +16,7 @@ export const createMapCellInfoToRecurringTimeRange: MapCellInfoToDateRange = ({
   fromY: toMin,
   fromX: toDay,
   originDate
-}) => ({ startX, startY, endX, spanY }) => {
+}) => ({ id, startX, startY, endX, spanY }) => {
   const result = range(startX, endX + 1)
     .map(i => {
       const startDate = cellToDate({
@@ -32,13 +32,15 @@ export const createMapCellInfoToRecurringTimeRange: MapCellInfoToDateRange = ({
         endDate = endOfDay(subDays(endDate, 1));
       }
 
-      const range: DateRange = isBefore(startDate, endDate)
+      const value: [Date, Date] = isBefore(startDate, endDate)
         ? [startDate, endDate]
         : [endDate, startDate];
 
-      return range;
+      return { id: id.range, value };
     })
-    .sort((rangeA, rangeB) => (isBefore(rangeA[0], rangeB[0]) ? 0 : 1));
+    .sort((rangeA, rangeB) =>
+      isBefore(rangeA.value[0], rangeB.value[0]) ? 0 : 1
+    );
 
   return result;
 };

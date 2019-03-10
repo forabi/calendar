@@ -14,8 +14,12 @@ export const Cell = React.memo(function Cell({
   getDateRangeForVisualGrid(cell: CellInfo): DateRange[];
   children?(options: { start: Date; isHourStart: boolean }): React.ReactNode;
 }) {
-  const [[start]] = getDateRangeForVisualGrid({
-    id: '',
+  const [
+    {
+      value: [start]
+    }
+  ] = getDateRangeForVisualGrid({
+    id: { range: '', self: '' },
     startX: 0,
     startY: timeIndex,
     endX: 0,
