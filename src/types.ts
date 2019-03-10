@@ -8,6 +8,7 @@ export type Coords = { x: number; y: number };
 export type Event = DateRange[];
 
 export type CellInfo = {
+  id: string;
   spanX: number;
   spanY: number;
   startX: number;
@@ -40,6 +41,7 @@ export type Grid = {
 };
 
 export type Rect = ClientRect & {
+  id: string;
   startX: number;
   endX: number;
   startY: number;

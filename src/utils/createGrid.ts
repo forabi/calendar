@@ -24,7 +24,7 @@ export const createGrid = ({
     cellWidth,
     cellHeight,
 
-    getRectFromCell(data: CellInfo) {
+    getRectFromCell({ id, ...data }: CellInfo) {
       const { endX, startX, endY, startY, spanX, spanY } = data;
       const bottom = endY * this.cellHeight;
       const top = startY * this.cellHeight;
@@ -34,6 +34,7 @@ export const createGrid = ({
       const width = spanX * this.cellWidth;
 
       return {
+        id,
         bottom,
         top,
         left,
@@ -49,7 +50,7 @@ export const createGrid = ({
       };
     },
 
-    getCellFromRect(data: Rect) {
+    getCellFromRect({ id, ...data }: Rect) {
       const startX = clamp(
         floor(data.left / this.cellWidth),
         0,
@@ -74,6 +75,7 @@ export const createGrid = ({
       const spanY = clamp(getSpan(startY, endY), 1, numVerticalCells);
 
       return {
+        id,
         spanX,
         spanY,
         startX,

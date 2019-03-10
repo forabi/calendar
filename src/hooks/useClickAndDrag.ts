@@ -9,7 +9,8 @@ import {
   startWith,
   distinctUntilChanged,
   filter,
-  delay
+  delay,
+  zip
 } from 'rxjs/operators';
 import { createPageMapCoordsToContainer } from '../utils/createPageMapCoordsToContainer';
 import { Rect } from '../types';
@@ -72,7 +73,8 @@ export function useClickAndDrag(ref: React.RefObject<HTMLElement>) {
     });
 
     const dragStart$ = merge(mouseDown$, touchStartWithDelay$).pipe(
-      map(mapCoordsToContainer)
+      map(mapCoordsToContainer),
+      zip(event => [event, 'id'] as [typeof event, string])
     );
 
     const dragEnd$ = merge(mouseUp$, touchEnd$).pipe(
@@ -90,7 +92,7 @@ export function useClickAndDrag(ref: React.RefObject<HTMLElement>) {
         setIsDragging(true);
         setHasFinishedDragging(false);
       }),
-      mergeMap(down => {
+      mergeMap(([down, id]) => {
         return move$.pipe(
           startWith(down),
           map(
@@ -105,6 +107,7 @@ export function useClickAndDrag(ref: React.RefObject<HTMLElement>) {
               const right = Math.max(startX, endX);
 
               return {
+                id,
                 startX,
                 startY,
                 endX,
