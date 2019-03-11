@@ -1,13 +1,13 @@
 {
-  "main.css": "/calendar/static/css/main.49991df0.chunk.css",
-  "main.js": "/calendar/static/js/main.b7a0739d.chunk.js",
-  "main.js.map": "/calendar/static/js/main.b7a0739d.chunk.js.map",
-  "runtime~main.js": "/calendar/static/js/runtime~main.8bcf0e19.js",
-  "runtime~main.js.map": "/calendar/static/js/runtime~main.8bcf0e19.js.map",
-  "static/js/2.b006c963.chunk.js": "/calendar/static/js/2.b006c963.chunk.js",
-  "static/js/2.b006c963.chunk.js.map": "/calendar/static/js/2.b006c963.chunk.js.map",
-  "index.html": "/calendar/index.html",
-  "precache-manifest.4e79056270c96c272d5b82023cb25ad6.js": "/calendar/precache-manifest.4e79056270c96c272d5b82023cb25ad6.js",
-  "service-worker.js": "/calendar/service-worker.js",
-  "static/css/main.49991df0.chunk.css.map": "/calendar/static/css/main.49991df0.chunk.css.map"
+  "main.css": "/react-week-scheduler/static/css/main.f8e23ba2.chunk.css",
+  "main.js": "/react-week-scheduler/static/js/main.3983c602.chunk.js",
+  "main.js.map": "/react-week-scheduler/static/js/main.3983c602.chunk.js.map",
+  "runtime~main.js": "/react-week-scheduler/static/js/runtime~main.d5ae921c.js",
+  "runtime~main.js.map": "/react-week-scheduler/static/js/runtime~main.d5ae921c.js.map",
+  "static/js/2.b006c963.chunk.js": "/react-week-scheduler/static/js/2.b006c963.chunk.js",
+  "static/js/2.b006c963.chunk.js.map": "/react-week-scheduler/static/js/2.b006c963.chunk.js.map",
+  "index.html": "/react-week-scheduler/index.html",
+  "precache-manifest.be76051388da256ed28f7830d50faccf.js": "/react-week-scheduler/precache-manifest.be76051388da256ed28f7830d50faccf.js",
+  "service-worker.js": "/react-week-scheduler/service-worker.js",
+  "static/css/main.f8e23ba2.chunk.css.map": "/react-week-scheduler/static/css/main.f8e23ba2.chunk.css.map"
 }
