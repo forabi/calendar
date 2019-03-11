@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/react-week-scheduler/precache-manifest.be76051388da256ed28f7830d50faccf.js"
+  "/react-week-scheduler/precache-manifest.f5b9124b2715df14e44ff6d17fdfdf8d.js"
 );
 
 workbox.clientsClaim();
