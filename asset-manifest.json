@@ -1,13 +1,13 @@
 {
-  "main.css": "/react-week-scheduler/static/css/main.fcc3949a.chunk.css",
-  "main.js": "/react-week-scheduler/static/js/main.850db907.chunk.js",
-  "main.js.map": "/react-week-scheduler/static/js/main.850db907.chunk.js.map",
+  "main.css": "/react-week-scheduler/static/css/main.cd03f5bf.chunk.css",
+  "main.js": "/react-week-scheduler/static/js/main.524cf487.chunk.js",
+  "main.js.map": "/react-week-scheduler/static/js/main.524cf487.chunk.js.map",
   "runtime~main.js": "/react-week-scheduler/static/js/runtime~main.d5ae921c.js",
   "runtime~main.js.map": "/react-week-scheduler/static/js/runtime~main.d5ae921c.js.map",
-  "static/js/2.50a07193.chunk.js": "/react-week-scheduler/static/js/2.50a07193.chunk.js",
-  "static/js/2.50a07193.chunk.js.map": "/react-week-scheduler/static/js/2.50a07193.chunk.js.map",
+  "static/js/2.9e3a7b8f.chunk.js": "/react-week-scheduler/static/js/2.9e3a7b8f.chunk.js",
+  "static/js/2.9e3a7b8f.chunk.js.map": "/react-week-scheduler/static/js/2.9e3a7b8f.chunk.js.map",
   "index.html": "/react-week-scheduler/index.html",
-  "precache-manifest.4045e8c6dcd1c7b46cc2e71b77137c85.js": "/react-week-scheduler/precache-manifest.4045e8c6dcd1c7b46cc2e71b77137c85.js",
+  "precache-manifest.39389e36fadb5bc6ed761f942287cb73.js": "/react-week-scheduler/precache-manifest.39389e36fadb5bc6ed761f942287cb73.js",
   "service-worker.js": "/react-week-scheduler/service-worker.js",
-  "static/css/main.fcc3949a.chunk.css.map": "/react-week-scheduler/static/css/main.fcc3949a.chunk.css.map"
+  "static/css/main.cd03f5bf.chunk.css.map": "/react-week-scheduler/static/css/main.cd03f5bf.chunk.css.map"
 }
